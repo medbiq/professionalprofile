@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 rel. 2 sp2 (http://www.altova.com) by Valerie Smothers (Johns Hopkins University) -->
+<xsd:schema xmlns="http://ns.medbiq.org/member/v2/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:n="http://ns.medbiq.org/name/v2/" xmlns:a="http://ns.medbiq.org/address/v2/" xmlns:mbq="http://ns.medbiq.org/common/v2/" targetNamespace="http://ns.medbiq.org/member/v2/" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xsd:import namespace="http://ns.medbiq.org/name/v2/" schemaLocation="http://ns.medbiq.org/name/v2/name.xsd"/>
+	<xsd:import namespace="http://ns.medbiq.org/address/v2/" schemaLocation="http://ns.medbiq.org/address/v2/address.xsd"/>
+	<xsd:import namespace="http://ns.medbiq.org/common/v2/" schemaLocation="http://ns.medbiq.org/common/v2/common.xsd"/>
+	<!--Copyright © 2014 MedBiquitous Consortium. All Rights Reserved. http://www.medbiq.org-->
+	<!--Users are bound by the terms of the MedBiquitous Consortium XML Public License and Terms of Use-->
+	<!--Modified 3 January 2014-->
+	<!--CommonAttributes, CountryCodeRestrictionType, IntegerType, NationalPhoneNumberRestrictedType, and NationalPhoneNumberType were taken from member.xsd dated 17 Sep 2013. NonNullStringWithAttributes was modified to point to common.xsd datatype. CountryCodeType was renamed CountryCodeITUType.-->
+	<!--ContactNumberType shown below is a proposed revision-->
+	<xsd:complexType name="ContactNumberType">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="TelephoneNumberString" type="TelephoneNumberStringType"/>
+				<xsd:element name="TelephoneNumberITU" type="TelephoneNumberITUType"/>
+			</xsd:choice>
+			<xsd:element name="Extension" type="NonNullStringWithAttributesType" minOccurs="0"/>
+			<xsd:element name="Description" type="NonNullStringWithAttributesType" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="CommonAttributes"/>
+	</xsd:complexType>
+	<!--TelephoneNumberITUType and TelephoneNumberStringType are new datatypes created for this proposed revision-->
+	<xsd:complexType name="TelephoneNumberITUType">
+		<xsd:sequence>
+			<xsd:element name="CountyCodeITU" type="CountryCodeITUType" minOccurs="0"/>
+			<xsd:element name="NationalPhoneNumber" type="NationalPhoneNumberType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TelephoneNumberStringType">
+		<xsd:sequence>
+			<xsd:element name="CountryCodeInteger" type="IntegerType" minOccurs="0"/>
+			<xsd:element name="TelephoneNumber" type="NonNullStringWithAttributesType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<!--CountryCodeITUType is the CountryCodeType renamed.-->
+	<xsd:complexType name="CountryCodeITUType">
+		<xsd:annotation>
+			<xsd:documentation>Complex type using (allowing attributes) CountryCodeRestrictionType as its base.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="CountryCodeRestrictionType">
+				<xsd:attributeGroup ref="CommonAttributes"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<!--The datatypes below are copied from member.xsd for validation purposes only-->
+	<xsd:attributeGroup name="CommonAttributes">
+		<xsd:attribute name="id" type="xsd:ID"/>
+		<xsd:attribute name="source" type="xsd:string"/>
+		<xsd:attribute name="validityDate" type="xsd:date"/>
+		<xsd:attribute name="restrictions" type="mbq:RestrictionsType"/>
+	</xsd:attributeGroup>
+	<xsd:simpleType name="CountryCodeRestrictionType">
+		<xsd:restriction base="xsd:integer">
+			<xsd:totalDigits value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="NationalPhoneNumberRestrictedType">
+		<xsd:restriction base="xsd:integer">
+			<xsd:totalDigits value="14"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="IntegerType">
+		<xsd:annotation>
+			<xsd:documentation>Complex type (allows attributes) using xsd:integer as its base.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:integer">
+				<xsd:attributeGroup ref="CommonAttributes"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="NationalPhoneNumberType">
+		<xsd:annotation>
+			<xsd:documentation>Complex type using (allowing attributes) NationalPhoneNumberRestrictedType as its base.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="NationalPhoneNumberRestrictedType">
+				<xsd:attributeGroup ref="CommonAttributes"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="NonNullStringWithAttributesType">
+		<xsd:annotation>
+			<xsd:documentation>Complex type using (allowing attributes) NonNullStringType as its base.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="mbq:NonNullStringType">
+				<xsd:attributeGroup ref="CommonAttributes"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+</xsd:schema>
